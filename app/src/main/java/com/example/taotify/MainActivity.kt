@@ -7,11 +7,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.taotify.nagivation.Screen
+import com.example.taotify.screens.HomeScreen
 import com.example.taotify.ui.theme.TaotifyTheme
+import com.example.taotify.screens.LoginScreen
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,10 +24,7 @@ class MainActivity : ComponentActivity() {
     setContent {
       TaotifyTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-          Greeting(
-            name = "Android",
-            modifier = Modifier.padding(innerPadding)
-          )
+          AppNav(modifier = Modifier.padding(innerPadding))
         }
       }
     }
@@ -31,17 +32,27 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-  Text(
-    text = "Hello $name!",
-    modifier = modifier
-  )
-}
+fun AppNav(
+  modifier: Modifier
+) {
+  val navController = rememberNavController()
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-  TaotifyTheme {
-    Greeting("Android")
+  NavHost(
+    navController = navController,
+    startDestination = Screen.Login.route
+  ) {
+    composable(Screen.Login.route) {
+      LoginScreen(
+        onLoginSuccess = {
+          navController.navigate(Screen.Home.route) {
+            popUpTo(Screen.Login.route) { inclusive = true }
+          }
+        }
+      )
+    }
+
+    composable(Screen.Home.route) {
+      HomeScreen(modifier)
+    }
   }
 }
