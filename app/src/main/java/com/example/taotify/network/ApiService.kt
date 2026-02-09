@@ -20,7 +20,7 @@ interface ApiService {
   suspend fun ping(
     @Query("s") salt: String,
     @Query("v") apiVersion: String,
-    @Query("c") client: String = "myapp",
+    @Query("c") client: String = "taotify",
     @Query("u") username: String,
     @Query("f") format: String = "json",
     @Query("t") token: String

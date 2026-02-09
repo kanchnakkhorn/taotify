@@ -23,16 +23,30 @@ import androidx.compose.ui.unit.dp
 import com.example.taotify.R
 import com.example.taotify.components.AuthTextField
 import com.example.taotify.components.PrimaryButton
+import com.example.taotify.data.UserPreferences
+import com.example.taotify.data.UserSession
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
+
+sealed class LoginResult {
+  object Success : LoginResult()
+  object InvalidCredentials : LoginResult()
+  object ServerUnreachable : LoginResult()
+}
+
 
 suspend fun login(
+  context: Context,
   serverAddress: String,
   username: String,
   password: String
-): Boolean {
+): LoginResult {
+
   val salt = generateSalt()
   val token = md5(password + salt)
-
   val api = ApiClient.create(baseUrl = serverAddress)
 
   return try {
@@ -43,9 +57,23 @@ suspend fun login(
       token = token
     )
 
-    response.`subsonic-response`.status == "ok"
-  } catch (e: Exception) {
-    false
+    if (response.`subsonic-response`.status == "ok") {
+      UserSession(serverAddress, username, token, salt)
+      UserPreferences.save(context, serverAddress, username, salt, token)
+
+      LoginResult.Success
+    } else {
+      LoginResult.InvalidCredentials
+    }
+
+  } catch (e: UnknownHostException) {
+    LoginResult.ServerUnreachable
+
+  } catch (e: ConnectException) {
+    LoginResult.ServerUnreachable
+
+  } catch (e: SocketTimeoutException) {
+    LoginResult.ServerUnreachable
   }
 }
 
@@ -93,24 +121,40 @@ fun LoginScreen(
       placeHolder = "password",
     )
 
+    var loading by remember { mutableStateOf(false) }
     PrimaryButton(
+      loading = loading,
       label = "Login",
       onClick = {
         scope.launch {
-          val success = login(serverAddress, username, password)
+          loading = true
+          when (val result = login(context, serverAddress, username, password)) {
+            LoginResult.Success -> {
+              onLoginSuccess()
+            }
 
-          if (success) {
-            onLoginSuccess()
-          } else {
-            Toast.makeText(
-              context,
-              "Login failed",
-              Toast.LENGTH_SHORT
-            ).show()
+            LoginResult.InvalidCredentials -> {
+              loading = false
+              Toast.makeText(
+                context,
+                "Wrong username or password",
+                Toast.LENGTH_SHORT
+              ).show()
+            }
+
+            LoginResult.ServerUnreachable -> {
+              loading = false
+              Toast.makeText(
+                context,
+                "Cannot reach server. Check IP and port.",
+                Toast.LENGTH_SHORT
+              ).show()
+            }
           }
         }
       }
     )
+
 
   }
 
