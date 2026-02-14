@@ -64,4 +64,9 @@ dependencies {
 
   // DataStore (session storage)
   implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+  // Coil (image loading)
+  implementation("io.coil-kt:coil-compose:2.5.0")
+  // Navigate and pass data (Like intend)
+  implementation("androidx.navigation:navigation-compose:2.7.7")
 }
