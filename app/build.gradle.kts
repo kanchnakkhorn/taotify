@@ -64,4 +64,7 @@ dependencies {
 
   // DataStore (session storage)
   implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+  // load and display art cover
+  implementation("io.coil-kt:coil-compose:2.6.0")
 }
