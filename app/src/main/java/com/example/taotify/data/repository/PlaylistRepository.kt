@@ -1,7 +1,7 @@
 package com.example.taotify.data.repository
 
-import com.example.taotify.data.model.Entry
 import com.example.taotify.data.model.Playlist
+import com.example.taotify.data.model.Song
 import com.example.taotify.session.SessionProvider
 import com.example.taotify.utility.FetchResult
 import javax.inject.Inject
@@ -41,7 +41,7 @@ class PlaylistRepository @Inject constructor() {
     }
   }
 
-  suspend fun getPlaylist(playlistId: String): FetchResult<List<Entry>> {
+  suspend fun getPlaylist(playlistId: String): FetchResult<List<Song>> {
     val session = SessionProvider.session ?: return FetchResult.InvalidSession
     val server = session.server
     val username = session.username

@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.taotify.R
-import com.example.taotify.data.model.Entry
+import com.example.taotify.data.model.Song
 import com.example.taotify.network.MediaRetrieval
 import com.example.taotify.ui.theme.CircularStd
 import com.example.taotify.ui.theme.Neutral01
@@ -36,9 +36,9 @@ import com.example.taotify.ui.theme.Neutral02
 
 @Composable
 fun TrackListing(
-  entry: Entry,
+  entry: Song,
   index: Int,
-  onItemClick: (Entry) -> Unit,
+  onItemClick: (Song) -> Unit,
   modifier: Modifier = Modifier
 ) {
 
@@ -114,7 +114,7 @@ fun TrackListing(
           )
 
           Text(
-            text = "${entry.playcount}",
+            text = "${entry.playCount}",
             color = Neutral02,
             fontSize = 16.sp,
             fontFamily = CircularStd,

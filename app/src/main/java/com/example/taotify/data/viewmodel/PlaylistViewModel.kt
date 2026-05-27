@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.taotify.data.model.Entry
 import com.example.taotify.data.model.Playlist
+import com.example.taotify.data.model.Song
 import com.example.taotify.data.repository.PlaylistRepository
 import com.example.taotify.utility.FetchResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +21,7 @@ class PlaylistsViewModel @Inject constructor(
   var loading by mutableStateOf(true)
   var error by mutableStateOf<String?>(null)
   var playlists by mutableStateOf<List<Playlist>>(emptyList())
-  var playlistEntries by mutableStateOf<List<Entry>>(emptyList())
+  var playlistEntries by mutableStateOf<List<Song>>(emptyList())
 
 
   init {

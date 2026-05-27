@@ -14,15 +14,5 @@ data class Playlist(
   val created: String,
   val changed: String,
   val coverArt: String,
-  val entry: List<Entry>
-)
-
-data class Entry(
-  val id: String,
-  val title: String,
-  val coverArt: String,
-  val artist: String,
-  val album: String,
-  val duration: Int,
-  val playcount: Int
+  val entry: List<Song>
 )

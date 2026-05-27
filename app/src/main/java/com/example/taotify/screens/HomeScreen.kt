@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.taotify.components.PageHeader
 import com.example.taotify.components.playlist.PlayListsContent
+import com.example.taotify.data.viewmodel.AudioViewModel
 import com.example.taotify.data.viewmodel.PlaylistsViewModel
 import com.example.taotify.nagivation.Screen
 import com.example.taotify.ui.theme.Neutral02
@@ -20,10 +21,10 @@ import com.example.taotify.ui.theme.Neutral02
 @Composable
 fun HomeScreen(
   navController: NavController,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  audioViewModel: AudioViewModel = hiltViewModel(),
+  playlistsViewModel: PlaylistsViewModel = hiltViewModel()
 ) {
-  val viewModel: PlaylistsViewModel = hiltViewModel()
-
   Column(modifier.padding(16.dp)) {
     PageHeader("Home")
 
@@ -34,21 +35,21 @@ fun HomeScreen(
       contentAlignment = Alignment.Center
     ) {
       when {
-        viewModel.loading -> {
+        playlistsViewModel.loading -> {
           Text(
             text = "Loading playlists...",
             color = Neutral02,
           )
         }
 
-        viewModel.error != null -> {
+        playlistsViewModel.error != null -> {
           Text(
-            text = "Error: ${viewModel.error}",
+            text = "Error: ${playlistsViewModel.error}",
             color = Neutral02,
           )
         }
 
-        viewModel.playlists.isEmpty() -> {
+        playlistsViewModel.playlists.isEmpty() -> {
           Text(
             text = "You have no playlists yet.",
             color = Neutral02,
@@ -57,7 +58,7 @@ fun HomeScreen(
 
         else -> {
           PlayListsContent(
-            playlists = viewModel.playlists,
+            playlists = playlistsViewModel.playlists,
             onItemClick = { playlist ->
               navController.navigate(Screen.Playlist.createRoute(playlist.id))
             }
@@ -67,4 +68,3 @@ fun HomeScreen(
     }
   }
 }
-
