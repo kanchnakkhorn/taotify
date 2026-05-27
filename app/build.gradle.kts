@@ -77,4 +77,11 @@ dependencies {
 
   implementation("com.google.dagger:hilt-android:2.51.1")
   ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+
+  // Media player
+  implementation("androidx.media3:media3-exoplayer:1.10.0")
+  implementation("androidx.media3:media3-ui:1.10.0")
+  implementation("androidx.media3:media3-common:1.10.0")
+  implementation("androidx.media3:media3-ui-compose-material3:1.10.0")
+  implementation("androidx.compose.material3:material3:1.5.0-alpha15")
 }

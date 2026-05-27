@@ -3,8 +3,10 @@ package com.example.taotify.network
 import com.example.taotify.session.SessionProvider
 
 object MediaRetrieval {
-  fun getCoverArt(coverArtID: String) = buildURL("getCoverArt", "id=$coverArtID")
+  fun getCoverArt(coverArtID: String?) = buildURL("getCoverArt", "id=$coverArtID")
   // stream
+  fun getStreamingUrl(mediaID: String) = buildURL("stream", "id=$mediaID", "maxBitRate=128", "format=mp3")
+  // getTrack)
   // getCaptions
   // getLyrics
 
